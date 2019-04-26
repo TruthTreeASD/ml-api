@@ -18,7 +18,7 @@ api = Api(placebp, version='1.0',
 api.add_namespace(ns_place)
 
 year_range = ns_place.model('Year range',
-                            {'start': fields.Integer(default=1977, description="Starting year"),
+                            {'start': fields.Integer(default=1967, description="Starting year"),
                              'end': fields.Integer(default=2016, description="Ending year")})
 
 PlaceSingle = ns_place.model('Similar places for single attribute',
@@ -26,7 +26,7 @@ PlaceSingle = ns_place.model('Similar places for single attribute',
                               'place_type': fields.Integer(required=True, description="Type of place, Ex. state(0), county(1), city(2)"),
                               'attribute': fields.Integer(required=True, description="Attribute ID"),
                               'normalize_by': fields.Integer(description="Attribute to normalize the data, default = 1 (Population)", default=1),
-                              'year_range': fields.Nested(year_range, description="Year Range between 1977 and 2016"),
+                              'year_range': fields.Nested(year_range, description="Year Range between 1967 and 2016"),
                               'count': fields.Integer(2, description="Number of similar places in the output")})
 
 PlaceMulti = ns_place.model('Similar places for multiple attributes',
@@ -44,9 +44,9 @@ class YearRangeSchema(Schema):
 
     @validates_schema
     def validate_input(self, data):
-        if data['start'] < 1977 or data['end'] > 2016:
+        if data['start'] < 1967 or data['end'] > 2016:
             raise ValidationError(
-                "Only years between 1977 and 2016 are supported(inclusive)")
+                "Only years between 1967 and 2016 are supported(inclusive)")
 
 
 class PlaceSingleSchema(Schema):
@@ -113,9 +113,9 @@ class PlaceMultiSchema(Schema):
         if data['id'] not in place.df.index:
             errors['id'] = "Invalid place id"
 
-        if data['year'] < 1977 or data['year'] > 2016:
+        if data['year'] < 1967 or data['year'] > 2016:
             errors['year'] = [
-                "Only years between 1977 and 2016 are supported(inclusive)"]
+                "Only years between 1967 and 2016 are supported(inclusive)"]
 
         if errors:
             raise ValidationError(errors)
